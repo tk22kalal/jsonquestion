@@ -1,537 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anesthesia Equipment Quiz</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            padding: 30px 0;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-            color: #e0e0ff;
-        }
-        
-        .quiz-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .progress-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .progress-bar {
-            flex-grow: 1;
-            height: 15px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            margin: 0 20px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        
-        .question-container {
-            margin-bottom: 25px;
-        }
-        
-        .question-text {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            color: #2c3e50;
-            padding: 15px;
-            background: #f8f9fa;
-            border-left: 5px solid #3498db;
-            border-radius: 5px;
-        }
-        
-        .question-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .question-table th, .question-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        
-        .question-table th {
-            background-color: #3498db;
-            color: white;
-            font-weight: 600;
-        }
-        
-        .question-table tr:nth-child(even) {
-            background-color: #f5f7fa;
-        }
-        
-        .options-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 25px 0;
-        }
-        
-        @media (max-width: 768px) {
-            .options-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .option {
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .option:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-color: #3498db;
-        }
-        
-        .option-label {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-right: 15px;
-            color: #3498db;
-            min-width: 36px;
-        }
-        
-        .option-text {
-            flex-grow: 1;
-        }
-        
-        .option.selected {
-            background-color: #e3f2fd;
-            border-color: #3498db;
-        }
-        
-        .option.correct {
-            background-color: #e8f5e9;
-            border-color: #4caf50;
-        }
-        
-        .option.incorrect {
-            background-color: #ffebee;
-            border-color: #f44336;
-        }
-        
-        .explanation-container {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 25px 0;
-            border-left: 5px solid #3498db;
-            display: none;
-        }
-        
-        .explanation-container h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-        }
-        
-        .explanation-content {
-            line-height: 1.7;
-        }
-        
-        .explanation-content img {
-            max-width: 100%;
-            margin: 15px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-        
-        .btn {
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-        }
-        
-        .btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn-next {
-            background: linear-gradient(to right, #27ae60, #219653);
-        }
-        
-        .score-container {
-            text-align: center;
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            display: none;
-            margin-top: 30px;
-        }
-        
-        .score-container h2 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        
-        .final-score {
-            font-size: 4rem;
-            font-weight: bold;
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 20px 0;
-        }
-        
-        .restart-btn {
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            margin-top: 20px;
-        }
-        
-        .quiz-image {
-            max-width: 100%;
-            border-radius: 10px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-            display: block;
-        }
-        
-        .image-caption {
-            text-align: center;
-            font-style: italic;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .footer-note {
-            text-align: center;
-            color: #e0e0ff;
-            padding: 20px;
-            font-size: 0.9rem;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Medical Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .options button {
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      width: 100%;
+      background: #e0e0e0;
+      border: none;
+      border-radius: 8px;
+      text-align: left;
+      transition: background 0.3s ease;
+      cursor: pointer;
+    }
+    .options button.correct {
+      background: #c8e6c9;
+    }
+    .options button.incorrect {
+      background: #ffcdd2;
+    }
+    .explanation {
+      margin-top: 20px;
+      background: #f9f9f9;
+      padding: 15px;
+      border-left: 4px solid #2196F3;
+    }
+    img {
+      max-width: 100%;
+      margin-top: 10px;
+    }
+    audio {
+      margin-top: 10px;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Anesthesia Equipment Quiz</h1>
-            <p>Test your knowledge of medical gas cylinders, vaporizers, and anesthesia systems with this specialized quiz</p>
-        </header>
-        
-        <main>
-            <div class="quiz-container" id="quiz">
-                <div class="progress-container">
-                    <div class="progress-count">Question <span id="current">1</span> of <span id="total">4</span></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress"></div>
-                    </div>
-                    <div class="score">Score: <span id="score">0</span></div>
-                </div>
-                
-                <div class="question-container">
-                    <div class="question-text" id="question-text"></div>
-                    <div id="question-image-container"></div>
-                    <div class="options-container" id="options-container"></div>
-                </div>
-                
-                <div class="explanation-container" id="explanation-container">
-                    <h3>Explanation</h3>
-                    <div class="explanation-content" id="explanation"></div>
-                    <div id="explanation-images"></div>
-                </div>
-                
-                <div class="navigation">
-                    <button class="btn btn-prev" id="prev-btn" disabled>Previous</button>
-                    <button class="btn btn-next" id="next-btn">Next Question</button>
-                </div>
-            </div>
-            
-            <div class="score-container" id="score-container">
-                <h2>Quiz Completed!</h2>
-                <p>Your final score:</p>
-                <div class="final-score" id="final-score">0/4</div>
-                <button class="btn restart-btn" id="restart-btn">Restart Quiz</button>
-            </div>
-        </main>
-        
-        <div class="footer-note">
-            <p>This quiz is designed for educational purposes to test knowledge of anesthesia equipment</p>
-        </div>
-    </div>
-    
-    <script>
-        // The questions array will be added manually as per the requirement
-        // For the purpose of this preview, I'll create a placeholder array
-        // In the actual implementation, you will add the full questions array here
-        let questions = [{&quot;text&quot;: &quot;Match the gas to its respective cylinder body and shoulder colors. Column A (Gas) Column B (Body Color) Column C (Shoulder Color) 1. Oxygen a) Black i) White 2. N2O b) Blue ii) Blue 3. Nitrogen c) Black iii) Black 4. Carbon dioxide d) Gray iv) Gray 5. Entonox e) Blue v) White &amp;amp;amp; blue 6. Air f) Grey vi) Black &amp;amp;amp; white&quot;, &quot;options&quot;: [{&quot;label&quot;: &quot;A&quot;, &quot;text&quot;: &quot;1-a-i ; 2-b-ii ; 3-c-iii; 4-d-iv ; 5-e-v ; 6-f-vi&quot;, &quot;correct&quot;: true}, {&quot;label&quot;: &quot;B&quot;, &quot;text&quot;: &quot;1-a-vi ; 2-b-ii ; 3-c-iii; 4-d-iv ; 5-d-v ; 6-f-i&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;C&quot;, &quot;text&quot;: &quot;1-a-i ; 2-b-v ; 3-c-iii; 4-d-iv ; 5-d-ii ; 6-f-vi&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;D&quot;, &quot;text&quot;: &quot;1-a-i ; 2-b-ii ; 3-d-iv; 4-c-iii ; 5-d-v ; 6-f-vi&quot;, &quot;correct&quot;: false}], &quot;correct_answer&quot;: &quot;A. 1-a-i ; 2-b-ii ; 3-c-iii; 4-d-iv ; 5-e-v ; 6-f-vi&quot;, &quot;question_images&quot;: [], &quot;explanation_images&quot;: [], &quot;explanation&quot;: &quot;&lt;table cellspacing=\&quot;0\&quot; style=\&quot;border-collapse:collapse; width:552px\&quot;&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td rowspan=\&quot;2\&quot; style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p style=\&quot;text-align:center\&quot;&gt; &lt;/p&gt;\n&lt;p style=\&quot;text-align:center\&quot;&gt;&lt;strong&gt;Gas&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td colspan=\&quot;2\&quot; style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p style=\&quot;text-align:center\&quot;&gt;&lt;strong&gt;Cylinder color&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p style=\&quot;text-align:center\&quot;&gt;&lt;strong&gt;Body&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p style=\&quot;text-align:center\&quot;&gt;&lt;strong&gt;Shoulder&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Air&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Grey&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Black &amp;amp; white&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Oxygen&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Black&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;White&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;N2O&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Blue&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Blue&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Nitrogen&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Black&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Black&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Carbon dioxide&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Grey&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Grey&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Entonox&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Blue&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;White &amp;amp; blue &lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Helium&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Brown&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Brown&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n\n\n&lt;p style=&#x27;font-size: 10px; color: #808080; font-style: italic;&#x27;&gt;@dams_new_robot&lt;/p&gt;&quot;, &quot;bot&quot;: &quot;@dams_new_robot&quot;, &quot;audio&quot;: &quot;https://image.prepladder.com/content/PndBcRhfXrapYZlBx4QC1737884809.mp3&quot;, &quot;video&quot;: &quot;&quot;}, {&quot;text&quot;: &quot;You notice the following vaporizer being used in OT. What is the likely anesthetic agent that could be used here?&quot;, &quot;options&quot;: [{&quot;label&quot;: &quot;A&quot;, &quot;text&quot;: &quot;Desflurane&quot;, &quot;correct&quot;: true}, {&quot;label&quot;: &quot;B&quot;, &quot;text&quot;: &quot;Isoflurane&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;C&quot;, &quot;text&quot;: &quot;Sevoflurane&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;D&quot;, &quot;text&quot;: &quot;Halothane&quot;, &quot;correct&quot;: false}], &quot;correct_answer&quot;: &quot;A. Desflurane&quot;, &quot;question_images&quot;: [&quot;https://image.prepladder.com/content/3QlgAUTsUndiw5rQaUXq1735034218.png&quot;], &quot;explanation_images&quot;: [&quot;https://image.prepladder.com/content/SY02njbU3vpXt86Uu8Of1735034282.png&quot;, &quot;https://image.prepladder.com/content/9HAVO14NbG4xWZaPvVmM1734774925.png&quot;], &quot;explanation&quot;: &quot;&lt;table cellspacing=\&quot;0\&quot; style=\&quot;border-collapse:collapse; width:625px\&quot;&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td colspan=\&quot;2\&quot; style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;The most commonly used type is &lt;strong&gt;variable &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;4fc6b3ee501692777183061d4f55ff\&quot;&gt;bypass&lt;/span&gt; vaporizers&lt;/strong&gt; (except for Desflurane).&lt;/li&gt;\n&lt;li&gt;Made up of copper.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Principle&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td colspan=\&quot;2\&quot; style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;Based on the &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;19a5a39c6b169277720158b14e5cf1\&quot;&gt;vapor&lt;/span&gt; pressure of the inhaled &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;4b83ec31581692777181547f1a89ef\&quot;&gt;anesthetic&lt;/span&gt; agent&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td rowspan=\&quot;4\&quot; style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Color coding&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;Desflurane&lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Blue &lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;Isoflurane&lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Purple &lt;/strong&gt;&lt;strong&gt;(Option B)&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;Sevoflurane&lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Yellow &lt;/strong&gt;&lt;strong&gt;(Option C)&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;Halothane&lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Red &lt;/strong&gt;&lt;strong&gt;(Option D)&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Modification&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td colspan=\&quot;2\&quot; style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;Tec-6 &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;4fa5d60f481692777201f36552b1bc\&quot;&gt;vaporizer&lt;/span&gt; is used for Desflurane&lt;/strong&gt; &lt;strong&gt;(Option A)&lt;/strong&gt; (&lt;strong&gt;Reason: low boiling point of Desflurane)&lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n\n\n&lt;p style=&#x27;font-size: 10px; color: #808080; font-style: italic;&#x27;&gt;@dams_new_robot&lt;/p&gt;&quot;, &quot;bot&quot;: &quot;@dams_new_robot&quot;, &quot;audio&quot;: &quot;https://image.prepladder.com/content/2BugGfSy8DBmQB2zwpml1737995206.mp3&quot;, &quot;video&quot;: &quot;&quot;}, {&quot;text&quot;: &quot;How is a circle system made into a fully closed system?&quot;, &quot;options&quot;: [{&quot;label&quot;: &quot;A&quot;, &quot;text&quot;: &quot;APL valve is opened&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;B&quot;, &quot;text&quot;: &quot;APL valve is closed&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;C&quot;, &quot;text&quot;: &quot;APL valve is closed and the fresh gas flow is set equal to the uptake by the patient&quot;, &quot;correct&quot;: true}, {&quot;label&quot;: &quot;D&quot;, &quot;text&quot;: &quot;None of the above&quot;, &quot;correct&quot;: false}], &quot;correct_answer&quot;: &quot;C. APL valve is closed and the fresh gas flow is set equal to the uptake by the patient&quot;, &quot;question_images&quot;: [], &quot;explanation_images&quot;: [&quot;https://image.prepladder.com/content/PE5auBSFLopcuAokEucD1734775624.png&quot;], &quot;explanation&quot;: &quot;&lt;table cellspacing=\&quot;0\&quot; style=\&quot;border-collapse:collapse; width:624px\&quot;&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Components&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;Fresh gas inlet&lt;/li&gt;\n&lt;li&gt;Reservoir bag&lt;/li&gt;\n&lt;li&gt;Two one-way valves (inspiratory and &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;632c0c215816927771878b6e818a11\&quot;&gt;expiratory&lt;/span&gt; limbs)&lt;/li&gt;\n&lt;li&gt;Y-piece &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;f1e77365501692777185cee4cf4c75\&quot;&gt;connector&lt;/span&gt; to the patient&lt;/li&gt;\n&lt;li&gt;APL valve&lt;/li&gt;\n&lt;li&gt;Soda &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;c59d8f1bae1692777191d7665ba18f\&quot;&gt;lime&lt;/span&gt; canister for CO2 absorption&lt;/li&gt;\n&lt;li&gt;Kink-resistant corrugated tubing connecting components and patient&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Fully closed system&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;To make the circle system a fully closed system - the APL &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;416dd1004a169277720177d9a6adc5\&quot;&gt;valve&lt;/span&gt; is closed and the fresh gas flow is set equal to the &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;cc20d2d7111692777201fb0caeb3f2\&quot;&gt;uptake&lt;/span&gt; by the patient so that the overall volume of gas in the system is constant. &lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;ul&gt;\n&lt;li&gt;It is difficult to estimate the patient’s oxygen &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;cc20d2d7111692777201fb0caeb3f2\&quot;&gt;uptake&lt;/span&gt; accurately and therefore fully closed systems are rarely used in practice.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;Advantages&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;Conserves &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;4b83ec31581692777181547f1a89ef\&quot;&gt;anesthetic&lt;/span&gt; gases, heat, and moisture.&lt;/li&gt;\n&lt;li&gt;Allows low-flow &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;e24b7bd55d16927771818aaa6ad0ed\&quot;&gt;anesthesia&lt;/span&gt; with monitoring.&lt;/li&gt;\n&lt;li&gt;Low dead space; Y-piece tubing creates mechanical dead space comparable to non-rebreathing circuits.&lt;/li&gt;\n&lt;li&gt;Soda &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;c59d8f1bae1692777191d7665ba18f\&quot;&gt;lime&lt;/span&gt; canister is distant from the patient’s airway, reducing the &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;0b1500fcd816927771900b59d16bde\&quot;&gt;inhalation&lt;/span&gt; risk of &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;91ce1734d7169277719861b8b87f9f\&quot;&gt;soda&lt;/span&gt; &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;c59d8f1bae1692777191d7665ba18f\&quot;&gt;lime&lt;/span&gt; dust.&lt;/li&gt;\n&lt;li&gt;Reduces atmospheric pollution by recycling &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;4b83ec31581692777181547f1a89ef\&quot;&gt;anesthetic&lt;/span&gt; gases.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n\n\n&lt;p style=&#x27;font-size: 10px; color: #808080; font-style: italic;&#x27;&gt;@dams_new_robot&lt;/p&gt;&quot;, &quot;bot&quot;: &quot;@dams_new_robot&quot;, &quot;audio&quot;: &quot;https://image.prepladder.com/content/Z6ozV9c6v565TyK8Zh791737997618.mp3&quot;, &quot;video&quot;: &quot;&quot;}, {&quot;text&quot;: &quot;A 40 year male was undergoing laparoscopic cholecystectomy, in the middle of surgery, he developed tachypnoea with increased sweating, HR - 120 bpm, spO2 - 92%. Anesthetist observed the change and promptly responded by adding a CO2 absorber substance as shown in the image below, following which the signs and symptoms reverted back to normal limits. Which among the following inhalational agents is completely safe to be administered with the added substance?&quot;, &quot;options&quot;: [{&quot;label&quot;: &quot;A&quot;, &quot;text&quot;: &quot;Desflurane&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;B&quot;, &quot;text&quot;: &quot;Halothane&quot;, &quot;correct&quot;: true}, {&quot;label&quot;: &quot;C&quot;, &quot;text&quot;: &quot;Sevoflurane&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;D&quot;, &quot;text&quot;: &quot;Trilene&quot;, &quot;correct&quot;: false}], &quot;correct_answer&quot;: &quot;B. Halothane&quot;, &quot;question_images&quot;: [&quot;https://image.prepladder.com/content/CyVqOvT9qYCuQtGz1BaM1734775662.png&quot;], &quot;explanation_images&quot;: [&quot;https://image.prepladder.com/content/iS0iaXTk8dPOS873kjlV1734775704.png&quot;, &quot;https://image.prepladder.com/content/PgwNZKQolXZ0ED0xvzLt1734775740.png&quot;], &quot;explanation&quot;: &quot;&lt;table cellspacing=\&quot;0\&quot; style=\&quot;border-collapse:collapse; width:624px\&quot;&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Composition&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;80% Ca(OH)2 &lt;/strong&gt;&lt;/li&gt;\n&lt;li&gt;3% NaOH&lt;/li&gt;\n&lt;li&gt;2% KOH&lt;/li&gt;\n&lt;li&gt;16% H2O&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Absorptive capacity&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;20-26 L&lt;/strong&gt; of CO2/100g/min&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Indicator&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;strong&gt;Ethyl &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;3f54b73e011692777202c95e6aea2e\&quot;&gt;violet&lt;/span&gt; &lt;/strong&gt;(changes color upon exhaustion)&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p style=\&quot;text-align:center\&quot;&gt;&lt;img alt=\&quot;\&quot; data-author=\&quot;\&quot; data-hash=\&quot;\&quot; data-license=\&quot;\&quot; data-source=\&quot;\&quot; data-tags=\&quot;\&quot; height=\&quot;1000\&quot; src=\&quot;https://image.prepladder.com/content/PgwNZKQolXZ0ED0xvzLt1734775740.png\&quot; width=\&quot;1000\&quot;/&gt;&lt;/p&gt;\n&lt;br/&gt;\n&lt;br/&gt;\n\t\t\t &lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Exhaustion&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;Indicated by change of color&lt;/li&gt;\n&lt;li&gt;Results in rebreathing of CO2 (tachypnoea, tachycardia, hypoxia)&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;p&gt;&lt;strong&gt;Interactions&lt;/strong&gt;&lt;/p&gt;\n&lt;/td&gt;\n&lt;td style=\&quot;border-bottom:1px solid #000000; border-left:1px solid #000000; border-right:1px solid #000000; border-top:1px solid #000000; vertical-align:top\&quot;&gt;\n&lt;ul&gt;\n&lt;li&gt;Soda &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;c59d8f1bae1692777191d7665ba18f\&quot;&gt;Lime&lt;/span&gt; + &lt;strong&gt;Trilene&lt;/strong&gt; ⇾ &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;192822a62a1692777195fa2aa8568f\&quot;&gt;Phosgene&lt;/span&gt; (cause ARDS) + &lt;strong&gt;Dichloroacetylene (neurotoxic)&lt;/strong&gt;&lt;/li&gt;\n&lt;li&gt;&lt;strong&gt;Soda &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;c59d8f1bae1692777191d7665ba18f\&quot;&gt;Lime&lt;/span&gt; + &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;a87066d49e169277719815bfbbc270\&quot;&gt;Sevoflurane&lt;/span&gt; ⇾ COMPOUND - A (nephrotoxic)&lt;/strong&gt;&lt;/li&gt;\n&lt;li&gt;Minor interaction: with Desflurane, &lt;span class=\&quot;customMeta\&quot; data-dictid=\&quot;825de901c81692777187ec3572018e\&quot;&gt;Enflurane&lt;/span&gt; and Isoflurane, produces carbon monoxide&lt;strong&gt; (more with Baralyme)&lt;/strong&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n\n\n&lt;p style=&#x27;font-size: 10px; color: #808080; font-style: italic;&#x27;&gt;@dams_new_robot&lt;/p&gt;&quot;, &quot;bot&quot;: &quot;@dams_new_robot&quot;, &quot;audio&quot;: &quot;https://image.prepladder.com/content/Dnjq0xEuQV1ig7ekftIZ1740045135.mp3&quot;, &quot;video&quot;: &quot;&quot;}]; 
-        
-        // Initialize quiz variables
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let userAnswers = [];
-        
-        // DOM elements
-        const questionTextElement = document.getElementById('question-text');
-        const questionImageContainer = document.getElementById('question-image-container');
-        const optionsContainer = document.getElementById('options-container');
-        const explanationContainer = document.getElementById('explanation-container');
-        const explanationElement = document.getElementById('explanation');
-        const explanationImagesContainer = document.getElementById('explanation-images');
-        const currentElement = document.getElementById('current');
-        const totalElement = document.getElementById('total');
-        const progressElement = document.getElementById('progress');
-        const scoreElement = document.getElementById('score');
-        const prevButton = document.getElementById('prev-btn');
-        const nextButton = document.getElementById('next-btn');
-        const quizContainer = document.getElementById('quiz');
-        const scoreContainer = document.getElementById('score-container');
-        const finalScoreElement = document.getElementById('final-score');
-        const restartButton = document.getElementById('restart-btn');
-        
-        // Initialize the quiz
-        function initQuiz() {
-            // Set total questions
-            totalElement.textContent = questions.length;
-            
-            // Load the first question
-            loadQuestion(currentQuestionIndex);
-        }
-        
-        // Load a question
-        function loadQuestion(index) {
-            const question = questions[index];
-            
-            // Update progress
-            currentElement.textContent = index + 1;
-            progressElement.style.width = `${((index + 1) / questions.length) * 100}%`;
-            scoreElement.textContent = score;
-            
-            // Clear previous content
-            questionImageContainer.innerHTML = '';
-            optionsContainer.innerHTML = '';
-            explanationContainer.style.display = 'none';
-            
-            // Set question text
-            questionTextElement.innerHTML = question.text;
-            
-            // Add question image if exists
-            if (question.question_images && question.question_images.length > 0) {
-                question.question_images.forEach(imgUrl => {
-                    const img = document.createElement('img');
-                    img.src = imgUrl;
-                    img.alt = 'Question image';
-                    img.classList.add('quiz-image');
-                    questionImageContainer.appendChild(img);
-                });
-            }
-            
-            // Create options
-            question.options.forEach(option => {
-                const optionElement = document.createElement('div');
-                optionElement.classList.add('option');
-                optionElement.dataset.label = option.label;
-                
-                optionElement.innerHTML = `
-                    <div class="option-label">${option.label}.</div>
-                    <div class="option-text">${option.text}</div>
-                `;
-                
-                optionElement.addEventListener('click', () => selectOption(optionElement, option, question));
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            // Update navigation buttons
-            prevButton.disabled = index === 0;
-            nextButton.textContent = index === questions.length - 1 ? 'Finish Quiz' : 'Next Question';
-        }
-        
-        // Handle option selection
-        function selectOption(optionElement, option, question) {
-            // Deselect all options
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Select clicked option
-            optionElement.classList.add('selected');
-            
-            // Store user answer
-            userAnswers[currentQuestionIndex] = option.label;
-            
-            // Show explanation
-            showExplanation(question, option);
-        }
-        
-        // Show explanation for the question
-        function showExplanation(question, selectedOption) {
-            // Set explanation content
-            explanationElement.innerHTML = question.explanation;
-            
-            // Add explanation images if exist
-            explanationImagesContainer.innerHTML = '';
-            if (question.explanation_images && question.explanation_images.length > 0) {
-                question.explanation_images.forEach(imgUrl => {
-                    const img = document.createElement('img');
-                    img.src = imgUrl;
-                    img.alt = 'Explanation image';
-                    img.classList.add('quiz-image');
-                    explanationImagesContainer.appendChild(img);
-                });
-            }
-            
-            // Highlight correct and incorrect answers
-            document.querySelectorAll('.option').forEach(opt => {
-                const optionLabel = opt.dataset.label;
-                const questionOption = question.options.find(o => o.label === optionLabel);
-                
-                if (questionOption.correct) {
-                    opt.classList.add('correct');
-                } else if (optionLabel === selectedOption.label && !selectedOption.correct) {
-                    opt.classList.add('incorrect');
-                }
-            });
-            
-            // Update score if this is the first time answering this question
-            if (selectedOption.correct && userAnswers[currentQuestionIndex] === selectedOption.label) {
-                score++;
-                scoreElement.textContent = score;
-            }
-            
-            // Show explanation
-            explanationContainer.style.display = 'block';
-            
-            // Enable next button
-            nextButton.disabled = false;
-        }
-        
-        // Navigate to next question
-        function nextQuestion() {
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion(currentQuestionIndex);
-            } else {
-                finishQuiz();
-            }
-        }
-        
-        // Navigate to previous question
-        function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                loadQuestion(currentQuestionIndex);
-            }
-        }
-        
-        // Finish the quiz
-        function finishQuiz() {
-            quizContainer.style.display = 'none';
-            scoreContainer.style.display = 'block';
-            finalScoreElement.textContent = `${score}/${questions.length}`;
-        }
-        
-        // Restart the quiz
-        function restartQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            userAnswers = [];
-            quizContainer.style.display = 'block';
-            scoreContainer.style.display = 'none';
-            initQuiz();
-        }
-        
-        // Event listeners
-        nextButton.addEventListener('click', nextQuestion);
-        prevButton.addEventListener('click', prevQuestion);
-        restartButton.addEventListener('click', restartQuiz);
-        
-        // Initialize the quiz when the page loads
-        window.addEventListener('DOMContentLoaded', () => {
-            // In the actual implementation, you would add the full questions array here
-            // For the purpose of this preview, we'll initialize with an empty array
-            initQuiz();
+<div class="quiz-container" id="quiz"></div>
+
+<script>
+  // DO NOT CHANGE THIS LINE — Required format
+  questions = [{&quot;text&quot;: &quot;Match the gas to its respective cylinder body and shoulder colors...&quot;, &quot;options&quot;: [{&quot;label&quot;: &quot;A&quot;, &quot;text&quot;: &quot;1-a-i ; 2-b-ii ; 3-c-iii; 4-d-iv ; 5-e-v ; 6-f-vi&quot;, &quot;correct&quot;: true}, {&quot;label&quot;: &quot;B&quot;, &quot;text&quot;: &quot;1-a-vi ; 2-b-ii ; 3-c-iii; 4-d-iv ; 5-d-v ; 6-f-i&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;C&quot;, &quot;text&quot;: &quot;1-a-i ; 2-b-v ; 3-c-iii; 4-d-iv ; 5-d-ii ; 6-f-vi&quot;, &quot;correct&quot;: false}, {&quot;label&quot;: &quot;D&quot;, &quot;text&quot;: &quot;1-a-i ; 2-b-ii ; 3-d-iv; 4-c-iii ; 5-d-v ; 6-f-vi&quot;, &quot;correct&quot;: false}], &quot;correct_answer&quot;: &quot;A. 1-a-i ; 2-b-ii ; 3-c-iii; 4-d-iv ; 5-e-v ; 6-f-vi&quot;, &quot;question_images&quot;: [], &quot;explanation_images&quot;: [], &quot;explanation&quot;: &quot;&lt;table&gt;...&lt;/table&gt;&quot;, &quot;bot&quot;: &quot;@dams_new_robot&quot;, &quot;audio&quot;: &quot;https://image.prepladder.com/content/PndBcRhfXrapYZlBx4QC1737884809.mp3&quot;, &quot;video&quot;: &quot;&quot;}];
+
+  // Decode HTML entities from encoded JSON
+  const decodeEntities = str => {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = str;
+    return textarea.value;
+  };
+
+  // Render the quiz
+  const container = document.getElementById('quiz');
+  questions.forEach((q, index) => {
+    const questionCard = document.createElement('div');
+    questionCard.classList.add('question-card');
+
+    const questionText = document.createElement('div');
+    questionText.classList.add('question');
+    questionText.innerHTML = decodeEntities(q.text);
+    questionCard.appendChild(questionText);
+
+    // Add images if present
+    if (q.question_images && q.question_images.length) {
+      q.question_images.forEach(img => {
+        const imageEl = document.createElement('img');
+        imageEl.src = decodeEntities(img);
+        questionCard.appendChild(imageEl);
+      });
+    }
+
+    // Add options
+    const optionsDiv = document.createElement('div');
+    optionsDiv.classList.add('options');
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.textContent = `${opt.label}. ${opt.text}`;
+      btn.onclick = () => {
+        const allBtns = btn.parentElement.querySelectorAll('button');
+        allBtns.forEach(b => {
+          const lbl = b.textContent[0];
+          const optObj = q.options.find(o => o.label === lbl);
+          if (optObj.correct) b.classList.add('correct');
+          else if (b === btn) b.classList.add('incorrect');
         });
-    </script>
+        // Show explanation
+        if (!questionCard.querySelector('.explanation')) {
+          const explanationDiv = document.createElement('div');
+          explanationDiv.classList.add('explanation');
+          explanationDiv.innerHTML = `
+            <strong>Correct Answer:</strong> ${decodeEntities(q.correct_answer)}<br><br>
+            ${decodeEntities(q.explanation)}
+          `;
+
+          // Explanation Images
+          if (q.explanation_images && q.explanation_images.length) {
+            q.explanation_images.forEach(img => {
+              const imgEl = document.createElement('img');
+              imgEl.src = decodeEntities(img);
+              explanationDiv.appendChild(imgEl);
+            });
+          }
+
+          // Audio
+          if (q.audio) {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = decodeEntities(q.audio);
+            explanationDiv.appendChild(audio);
+          }
+
+          questionCard.appendChild(explanationDiv);
+        }
+      };
+      optionsDiv.appendChild(btn);
+    });
+
+    questionCard.appendChild(optionsDiv);
+    container.appendChild(questionCard);
+  });
+</script>
 </body>
 </html>
